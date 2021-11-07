@@ -47,7 +47,6 @@ if ($result_data > 0) {
 	<title>Punto Administrativo</title>
 
 	<!-- Custom styles for this template-->
-	<link rel="icon" type="image/png" sizes="50x50" href="/sistema/img/logo.png">
 	<link href="css/sb-admin-2.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
 
