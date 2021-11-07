@@ -74,11 +74,6 @@ if ($result_sql == 0) {
                               if ($rol == 2) {
                                 echo "selected";
                               }
-                              ?>>Supervisor</option>
-            <option value="3" <?php
-                              if ($rol == 3) {
-                                echo "selected";
-                              }
                               ?>>Vendedor</option>
           </select>
         </div>
