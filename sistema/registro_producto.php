@@ -63,15 +63,15 @@
          </div>
          <div class="form-group">
            <label for="producto">Producto</label>
-           <input type="text" placeholder="Ingrese nombre del producto" name="producto" id="producto" class="form-control">
+           <input type="text" placeholder="Ingrese nombre del producto" name="producto" id="producto" class="form-control" maxlength="50">
          </div>
          <div class="form-group">
            <label for="precio">Precio</label>
-           <input type="text" placeholder="Ingrese precio" class="form-control" name="precio" id="precio">
+           <input type="text" placeholder="Ingrese precio" class="form-control" name="precio" id="precio" maxlength="20">
          </div>
          <div class="form-group">
            <label for="cantidad">Cantidad</label>
-           <input type="number" placeholder="Ingrese cantidad" class="form-control" name="cantidad" id="cantidad">
+           <input type="number" placeholder="Ingrese cantidad" class="form-control" name="cantidad" id="cantidad" maxlength="20">
          </div>
          <input type="submit" value="Guardar Producto" class="btn btn-primary">
        </form>

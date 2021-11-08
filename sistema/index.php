@@ -115,15 +115,15 @@
 						<form action="" method=" post" name="frmChangePass" id="frmChangePass" class="p-3">
 							<div class="form-group">
 								<label>Contraseña Actual</label>
-								<input type="password" name="actual" id="actual" placeholder="Clave Actual" required class="form-control">
+								<input type="password" name="actual" id="actual" maxlength="30"placeholder="Clave Actual" required class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Nueva Contraseña</label>
-								<input type="password" name="nueva" id="nueva" placeholder="Nueva Clave" required class="form-control">
+								<input type="password" name="nueva" id="nueva" maxlength="30" placeholder="Nueva Clave" required class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Confirmar Contraseña</label>
-								<input type="password" name="confirmar" id="confirmar" placeholder="Confirmar clave" required class="form-control">
+								<input type="password" name="confirmar" id="confirmar" maxlength="30" placeholder="Confirmar clave" required class="form-control">
 							</div>
 							<div class="alertChangePass" style="display:none;">
 							</div>
@@ -145,31 +145,31 @@
 						<form action="empresa.php" method="post" id="frmEmpresa" class="p-3">
 							<div class="form-group">
 								<label>Nit:</label>
-								<input type="number" name="txtNit" value="<?php echo $nit; ?>" id="txtNit" placeholder="Nit de la Empresa" required class="form-control">
+								<input type="number" name="txtNit" value="<?php echo $nit; ?>" id="txtNit" placeholder="Nit de la Empresa" required class="form-control" maxlength="20">
 							</div>
 							<div class="form-group">
 								<label>Nombre:</label>
-								<input type="text" name="txtNombre" class="form-control" value="<?php echo $nombre_empresa; ?>" id="txtNombre" placeholder="Nombre de la Empresa" required class="form-control">
+								<input type="text" name="txtNombre" class="form-control" maxlength="50" value="<?php echo $nombre_empresa; ?>" id="txtNombre" placeholder="Nombre de la Empresa" required class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Razon Social:</label>
-								<input type="text" name="txtRSocial" class="form-control" value="<?php echo $razonSocial; ?>" id="txtRSocial" placeholder="Razon Social de la Empresa">
+								<input type="text" name="txtRSocial" class="form-control" value="<?php echo $razonSocial; ?>"  maxlength="50" id="txtRSocial" placeholder="Razon Social de la Empresa" maxlength="100">
 							</div>
 							<div class="form-group">
 								<label>Teléfono:</label>
-								<input type="number" name="txtTelEmpresa" class="form-control" value="<?php echo $telEmpresa; ?>" id="txtTelEmpresa" placeholder="teléfono de la Empresa" required>
+								<input maxlength="50" type="number" name="txtTelEmpresa" class="form-control" value="<?php echo $telEmpresa; ?>" id="txtTelEmpresa" maxlength="20" placeholder="teléfono de la Empresa" required>
 							</div>
 							<div class="form-group">
 								<label>Correo Electrónico:</label>
-								<input type="email" name="txtEmailEmpresa" class="form-control" value="<?php echo $emailEmpresa; ?>" id="txtEmailEmpresa" placeholder="Correo de la Empresa" required>
+								<input maxlength="30" type="email" name="txtEmailEmpresa" class="form-control" value="<?php echo $emailEmpresa; ?>" id="txtEmailEmpresa" placeholder="Correo de la Empresa" required>
 							</div>
 							<div class="form-group">
 								<label>Dirección:</label>
-								<input type="text" name="txtDirEmpresa" class="form-control" value="<?php echo $dirEmpresa; ?>" id="txtDirEmpresa" placeholder="Dirreción de la Empresa" required>
+								<input  maxlength="30" type="text" name="txtDirEmpresa" class="form-control" value="<?php echo $dirEmpresa; ?>" id="txtDirEmpresa" placeholder="Dirreción de la Empresa" required>
 							</div>
 							<div class="form-group">
 								<label>IVA (%):</label>
-								<input type="text" name="txtIgv" class="form-control" value="<?php echo $igv; ?>" id="txtIgv" placeholder="IVA de la Empresa" required>
+								<input maxlength="5" type="text" name="txtIgv" class="form-control" value="<?php echo $igv; ?>" id="txtIgv" placeholder="IVA de la Empresa" required>
 							</div>
 							<?php echo isset($alert) ? $alert : ''; ?>
 							<div>

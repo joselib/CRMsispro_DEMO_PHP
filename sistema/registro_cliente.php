@@ -55,19 +55,19 @@ if (!empty($_POST)) {
                 <?php echo isset($alert) ? $alert : ''; ?>
                 <div class="form-group">
                     <label for="cc">cc</label>
-                    <input type="number" placeholder="Ingrese cc" name="cc" id="cc" class="form-control">
+                    <input type="number" placeholder="Ingrese cc" name="cc" id="cc" class="form-control" maxlength="20">
                 </div>
                 <div class="form-group">
                     <label for="nombre">Nombre</label>
-                    <input type="text" placeholder="Ingrese Nombre" name="nombre" id="nombre" class="form-control">
+                    <input type="text" placeholder="Ingrese Nombre" name="nombre" id="nombre" class="form-control" maxlength="50">
                 </div>
                 <div class="form-group">
                     <label for="telefono">Teléfono</label>
-                    <input type="number" placeholder="Ingrese Teléfono" name="telefono" id="telefono" class="form-control">
+                    <input type="number" placeholder="Ingrese Teléfono" name="telefono" id="telefono" class="form-control" maxlength="20">
                 </div>
                 <div class="form-group">
                     <label for="direccion">Dirección</label>
-                    <input type="text" placeholder="Ingrese Direccion" name="direccion" id="direccion" class="form-control">
+                    <input type="text" placeholder="Ingrese Direccion" name="direccion" id="direccion" class="form-control" maxlength="100">
                 </div>
                 <input type="submit" value="Guardar Cliente" class="btn btn-primary">
             </form>

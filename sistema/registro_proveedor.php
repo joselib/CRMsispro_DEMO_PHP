@@ -52,19 +52,19 @@ mysqli_close($conexion);
                     <?php echo isset($alert) ? $alert : ''; ?>
                     <div class="form-group">
                         <label for="nombre">NOMBRE</label>
-                        <input type="text" placeholder="Ingrese nombre" name="proveedor" id="nombre" class="form-control">
+                        <input type="text" placeholder="Ingrese nombre" name="proveedor" id="nombre" class="form-control" maxlength="50">
                     </div>
                     <div class="form-group">
                         <label for="contacto">NIT</label>
-                        <input type="text" placeholder="Ingrese nombre del contacto" name="contacto" id="contacto" class="form-control">
+                        <input type="text" placeholder="Ingrese nombre del contacto" name="contacto" id="contacto" class="form-control" maxlength="50">
                     </div>
                     <div class="form-group">
                         <label for="telefono">TELÉFONO</label>
-                        <input type="number" placeholder="Ingrese teléfono" name="telefono" id="telefono" class="form-control">
+                        <input type="text" placeholder="Ingrese teléfono" name="telefono" id="telefono" class="form-control" maxlength="50">
                     </div>
                     <div class="form-group">
                         <label for="direccion">DIRECIÓN</label>
-                        <input type="text" placeholder="Ingrese Direccion" name="direccion" id="direcion" class="form-control">
+                        <input type="text" placeholder="Ingrese Direccion" name="direccion" id="direcion" class="form-control" maxlength="50">
                     </div>
                     <input type="submit" value="Guardar Proveedor" class="btn btn-primary">
                     <a href="lista_proveedor.php" class="btn btn-danger">Regresar</a>

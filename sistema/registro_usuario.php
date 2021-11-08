@@ -52,19 +52,19 @@ if (!empty($_POST)) {
                 <?php echo isset($alert) ? $alert : ''; ?>
                 <div class="form-group">
                     <label for="nombre">Nombre</label>
-                    <input type="text" class="form-control" placeholder="Ingrese Nombre" name="nombre" id="nombre">
+                    <input type="text" class="form-control" placeholder="Ingrese Nombre" name="nombre" id="nombre" maxlength="50">
                 </div>
                 <div class="form-group">
                     <label for="correo">Correo</label>
-                    <input type="email" class="form-control" placeholder="Ingrese Correo Electrónico" name="correo" id="correo">
+                    <input type="email" class="form-control" placeholder="Ingrese Correo Electrónico" name="correo" id="correo" maxlength="30">
                 </div>
                 <div class="form-group">
                     <label for="usuario">Usuario</label>
-                    <input type="text" class="form-control" placeholder="Ingrese Usuario" name="usuario" id="usuario">
+                    <input type="text" class="form-control" placeholder="Ingrese Usuario" name="usuario" id="usuario" maxlength="20">
                 </div>
                 <div class="form-group">
                     <label for="clave">Contraseña</label>
-                    <input type="password" class="form-control" placeholder="Ingrese Contraseña" name="clave" id="clave">
+                    <input type="password" class="form-control" placeholder="Ingrese Contraseña" name="clave" id="clave" maxlength="30">
                 </div>
                 <div class="form-group">
                     <label>Rol</label>
