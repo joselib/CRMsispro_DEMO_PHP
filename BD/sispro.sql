@@ -2,21 +2,21 @@
 -- version 4.9.7
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:8889
--- Generation Time: Nov 01, 2021 at 04:16 AM
--- Server version: 5.7.32
--- PHP Version: 7.4.12
+-- Servidor: localhost:8889
+-- Tiempo de generación: 21-11-2021 a las 02:05:26
+-- Versión del servidor: 5.7.32
+-- Versión de PHP: 7.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
--- Database: `ventas3`
+-- Base de datos: `sispro`
 --
 
 DELIMITER $$
 --
--- Procedures
+-- Procedimientos
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `actualizar_precio_producto` (IN `n_cantidad` INT, IN `n_precio` DECIMAL(10,2), IN `codigo` INT)  BEGIN
 DECLARE nueva_existencia int;
@@ -40,133 +40,60 @@ UPDATE producto SET existencia = nueva_existencia, precio = nuevo_precio WHERE c
 SELECT nueva_existencia, nuevo_precio;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_detalle_temp` (`codigo` INT, `cantidad` INT, `token_user` VARCHAR(50))  BEGIN
-DECLARE precio_actual decimal(10,2);
-SELECT precio INTO precio_actual FROM producto WHERE codproducto = codigo;
-INSERT INTO detalle_temp(token_user, codproducto, cantidad, precio_venta) VALUES (token_user, codigo, cantidad, precio_actual);
-SELECT tmp.correlativo, tmp.codproducto, p.descripcion, tmp.cantidad, tmp.precio_venta FROM detalle_temp tmp INNER JOIN producto p ON tmp.codproducto = p.codproducto WHERE tmp.token_user = token_user;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `data` ()  BEGIN
-DECLARE usuarios int;
-DECLARE clientes int;
-DECLARE proveedores int;
-DECLARE productos int;
-DECLARE ventas int;
-SELECT COUNT(*) INTO usuarios FROM usuario;
-SELECT COUNT(*) INTO clientes FROM cliente;
-SELECT COUNT(*) INTO proveedores FROM proveedor;
-SELECT COUNT(*) INTO productos FROM producto;
-SELECT COUNT(*) INTO ventas FROM factura WHERE fecha > CURDATE();
-
-SELECT usuarios, clientes, proveedores, productos, ventas;
-
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `del_detalle_temp` (`id_detalle` INT, `token` VARCHAR(50))  BEGIN
-DELETE FROM detalle_temp WHERE correlativo = id_detalle;
-SELECT tmp.correlativo, tmp.codproducto, p.descripcion, tmp.cantidad, tmp.precio_venta FROM detalle_temp tmp INNER JOIN producto p ON tmp.codproducto = p.codproducto WHERE tmp.token_user = token;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `procesar_venta` (IN `cod_usuario` INT, IN `cod_cliente` INT, IN `token` VARCHAR(50))  BEGIN
-DECLARE factura INT;
-DECLARE registros INT;
-DECLARE total DECIMAL(10,2);
-DECLARE nueva_existencia int;
-DECLARE existencia_actual int;
-
-DECLARE tmp_cod_producto int;
-DECLARE tmp_cant_producto int;
-DECLARE a int;
-SET a = 1;
-
-CREATE TEMPORARY TABLE tbl_tmp_tokenuser(
-	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    cod_prod BIGINT,
-    cant_prod int);
-SET registros = (SELECT COUNT(*) FROM detalle_temp WHERE token_user = token);
-IF registros > 0 THEN
-INSERT INTO tbl_tmp_tokenuser(cod_prod, cant_prod) SELECT codproducto, cantidad FROM detalle_temp WHERE token_user = token;
-INSERT INTO factura (usuario,codcliente) VALUES (cod_usuario, cod_cliente);
-SET factura = LAST_INSERT_ID();
-
-INSERT INTO detallefactura(nofactura,codproducto,cantidad,precio_venta) SELECT (factura) AS nofactura, codproducto, cantidad,precio_venta FROM detalle_temp WHERE token_user = token;
-WHILE a <= registros DO
-	SELECT cod_prod, cant_prod INTO tmp_cod_producto,tmp_cant_producto FROM tbl_tmp_tokenuser WHERE id = a;
-    SELECT existencia INTO existencia_actual FROM producto WHERE codproducto = tmp_cod_producto;
-    SET nueva_existencia = existencia_actual - tmp_cant_producto;
-    UPDATE producto SET existencia = nueva_existencia WHERE codproducto = tmp_cod_producto;
-    SET a=a+1;
-END WHILE;
-SET total = (SELECT SUM(cantidad * precio_venta) FROM detalle_temp WHERE token_user = token);
-UPDATE factura SET totalfactura = total WHERE nofactura = factura;
-DELETE FROM detalle_temp WHERE token_user = token;
-TRUNCATE TABLE tbl_tmp_tokenuser;
-SELECT * FROM factura WHERE nofactura = factura;
-ELSE
-SELECT 0;
-END IF;
-END$$
-
 DELIMITER ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cliente`
+-- Estructura de tabla para la tabla `cliente`
 --
 
 CREATE TABLE `cliente` (
   `idcliente` int(11) NOT NULL,
-  `cc` int(20) NOT NULL,
-  `nombre` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `telefono` int(50) NOT NULL,
-  `direccion` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
+  `cc` bigint(20) NOT NULL,
+  `nombre` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `telefono` bigint(20) NOT NULL,
+  `direccion` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
   `usuario_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Dumping data for table `cliente`
+-- Volcado de datos para la tabla `cliente`
 --
 
 INSERT INTO `cliente` (`idcliente`, `cc`, `nombre`, `telefono`, `direccion`, `usuario_id`) VALUES
-(1, 123, 'Pubico en general', 238829, 'Colombia', 1),
-(2, 12333, 'juan', 3102039, 'calle 74', 1),
-(3, 12334, 'pedro', 3102030, 'call', 8),
-(4, 1234, 'jorge', 302030, 'CALLE 20', 8),
-(5, 102039, 'juanl', 31020, 'calle', 8),
-(6, 129, 'ana', 312400, 'clla', 8),
-(7, 989, 'tani', 3029390, 'calle 74', 8),
-(9, 12039, 'jano', 32001902, 'clle', 8);
+(1, 1056592729, 'Pubico en genera', 350305172, 'calle 74 82 45', 1),
+(19, 192039, 'juan', 310020390, 'cll e', 8),
+(22, 102920, 'jose', 31002930, 'calle', 8);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `configuracion`
+-- Estructura de tabla para la tabla `configuracion`
 --
 
 CREATE TABLE `configuracion` (
   `id` int(11) NOT NULL,
   `nit` int(20) NOT NULL,
-  `nombre` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `razon_social` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `telefono` int(50) NOT NULL,
-  `email` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `nombre` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `razon_social` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `telefono` int(20) NOT NULL,
+  `email` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
   `direccion` text COLLATE utf8_spanish_ci NOT NULL,
   `igv` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Dumping data for table `configuracion`
+-- Volcado de datos para la tabla `configuracion`
 --
 
 INSERT INTO `configuracion` (`id`, `nit`, `nombre`, `razon_social`, `telefono`, `email`, `direccion`, `igv`) VALUES
-(1, 80034988, 'el imperioo', 'el imperio sas ', 3102930, 'elimperio@gmail.com', 'Colombia', '19.00');
+(1, 800349888, 'el imperioo', 'el imperio sas ', 3102930, 'elimperio@gmail.com', 'Colombiaa', '19.00');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `detalle_temp`
+-- Estructura de tabla para la tabla `detalle_temp`
 --
 
 CREATE TABLE `detalle_temp` (
@@ -178,7 +105,7 @@ CREATE TABLE `detalle_temp` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Dumping data for table `detalle_temp`
+-- Volcado de datos para la tabla `detalle_temp`
 --
 
 INSERT INTO `detalle_temp` (`correlativo`, `token_user`, `codproducto`, `cantidad`, `precio_venta`) VALUES
@@ -187,7 +114,7 @@ INSERT INTO `detalle_temp` (`correlativo`, `token_user`, `codproducto`, `cantida
 -- --------------------------------------------------------
 
 --
--- Table structure for table `entradas`
+-- Estructura de tabla para la tabla `entradas`
 --
 
 CREATE TABLE `entradas` (
@@ -200,22 +127,45 @@ CREATE TABLE `entradas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Dumping data for table `entradas`
+-- Volcado de datos para la tabla `entradas`
 --
 
 INSERT INTO `entradas` (`correlativo`, `codproducto`, `fecha`, `cantidad`, `precio`, `usuario_id`) VALUES
 (1, 7, '2021-10-31 21:34:32', 12, 1500, 8),
-(2, 7, '2021-10-31 21:34:50', 19, 1500, 8);
+(2, 7, '2021-10-31 21:34:50', 19, 1500, 8),
+(3, 24, '2021-11-02 20:58:39', 24, 3000000, 8),
+(4, 25, '2021-11-07 11:27:57', 234, 100000000, 8),
+(5, 25, '2021-11-07 11:28:08', 234, 100000000, 8),
+(6, 29, '2021-11-07 11:28:37', 1, 3000, 8),
+(7, 33, '2021-11-07 11:37:38', 23, 3000, 8),
+(8, 34, '2021-11-07 15:29:55', 7, 3000, 8),
+(9, 25, '2021-11-07 15:44:39', 12, 100000000, 8),
+(10, 25, '2021-11-07 20:41:32', 11, 1000000, 8),
+(11, 25, '2021-11-20 20:29:22', 12, 1000000, 8),
+(12, 25, '2021-11-20 20:29:32', 12, 100, 8),
+(13, 25, '2021-11-20 20:29:44', 12, 100, 8),
+(14, 25, '2021-11-20 20:29:51', 1, 100, 8),
+(15, 26, '2021-11-20 20:32:03', 12, 25000, 8),
+(16, 26, '2021-11-20 20:32:10', 1, 2500, 8),
+(17, 37, '2021-11-20 20:35:30', 1, 3000, 8),
+(18, 37, '2021-11-20 20:35:42', 1, 3001, 8),
+(19, 37, '2021-11-20 20:35:50', 1, 40, 8),
+(20, 37, '2021-11-20 20:38:30', 1, 400, 8),
+(21, 37, '2021-11-20 20:38:41', 1, 400, 8),
+(22, 37, '2021-11-20 20:38:54', 12, 4000, 8),
+(23, 37, '2021-11-20 20:39:02', 12, 4000, 8),
+(24, 37, '2021-11-20 20:39:24', 12, 40, 8),
+(25, 37, '2021-11-20 20:45:19', 1, 400, 8);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `producto`
+-- Estructura de tabla para la tabla `producto`
 --
 
 CREATE TABLE `producto` (
   `codproducto` int(11) NOT NULL,
-  `descripcion` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
+  `descripcion` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
   `proveedor` int(20) NOT NULL,
   `precio` int(20) NOT NULL,
   `existencia` int(20) NOT NULL,
@@ -223,42 +173,44 @@ CREATE TABLE `producto` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Dumping data for table `producto`
+-- Volcado de datos para la tabla `producto`
 --
 
 INSERT INTO `producto` (`codproducto`, `descripcion`, `proveedor`, `precio`, `existencia`, `usuario_id`) VALUES
-(19, 'tarta', 9, 700, 13, 8),
-(20, 'tito', 9, 300, 12, 8),
-(23, 'trt', 9, 3000, 12, 8);
+(25, 'aroz bslanc', 8, 100, 171, 8),
+(26, 'chocolatinas monblakn', 8, 2500, 136, 8),
+(33, 'ao', 8, 3000, 46, 8),
+(37, 'papas', 11, 400, 16, 8);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `proveedor`
+-- Estructura de tabla para la tabla `proveedor`
 --
 
 CREATE TABLE `proveedor` (
   `codproveedor` int(11) NOT NULL,
-  `proveedor` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `contacto` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `telefono` int(50) NOT NULL,
-  `direccion` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `proveedor` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `contacto` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `telefono` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `direccion` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
   `usuario_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Dumping data for table `proveedor`
+-- Volcado de datos para la tabla `proveedor`
 --
 
 INSERT INTO `proveedor` (`codproveedor`, `proveedor`, `contacto`, `telefono`, `direccion`, `usuario_id`) VALUES
-(6, 'jos sa s', '102903', 310209, 'calle', 8),
-(7, 'jorge u', '1203930', 310290390, 'calle', 8),
-(8, 'jorg tr', '1029300', 31020390, 'calle 74', 8);
+(6, 'jos sasn', '102903', '310209', 'calle', 8),
+(8, 'jorg tr', '1029300', '31020390', 'calle 74', 8),
+(11, 'nit sas ', '8902930-8', '310293099', 'cll', 8),
+(12, 'pan sr', '800029394', '32029303 02029330', 'calle 74', 8);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rol`
+-- Estructura de tabla para la tabla `rol`
 --
 
 CREATE TABLE `rol` (
@@ -267,7 +219,7 @@ CREATE TABLE `rol` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Dumping data for table `rol`
+-- Volcado de datos para la tabla `rol`
 --
 
 INSERT INTO `rol` (`idrol`, `rol`) VALUES
@@ -277,128 +229,127 @@ INSERT INTO `rol` (`idrol`, `rol`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuario`
+-- Estructura de tabla para la tabla `usuario`
 --
 
 CREATE TABLE `usuario` (
   `idusuario` int(11) NOT NULL,
-  `nombre` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `correo` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `nombre` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `correo` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
   `usuario` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
   `clave` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
   `rol` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Dumping data for table `usuario`
+-- Volcado de datos para la tabla `usuario`
 --
 
 INSERT INTO `usuario` (`idusuario`, `nombre`, `correo`, `usuario`, `clave`, `rol`) VALUES
-(6, 'Maria Perez Miranda', 'maria@gmail.com', 'maria', '263bce650e68ab4e23f28263760b9fa5', 3),
-(7, 'vendedor', 'VENDEDOR@gmail.com', 'vendedor', '0407e8c8285ab85509ac2884025dcf42', 2),
 (8, 'jose rincon', 'jose@gmail.com', 'jose', '21232f297a57a5a743894a0e4a801fc3', 1),
-(9, 'andrea', 'andrea@gmail.com', 'andrea', '1c42f9c1ca2f65441465b43cd9339d6c', 2);
+(17, 'jorge', 'jorge@gmail.com', 'jorge', 'd67326a22642a324aa1b0745f2f17abb', 2),
+(18, 'july', 'july@gmial.com', 'july', '21232f297a57a5a743894a0e4a801fc3', 1);
 
 --
--- Indexes for dumped tables
+-- Índices para tablas volcadas
 --
 
 --
--- Indexes for table `cliente`
+-- Indices de la tabla `cliente`
 --
 ALTER TABLE `cliente`
   ADD PRIMARY KEY (`idcliente`);
 
 --
--- Indexes for table `configuracion`
+-- Indices de la tabla `configuracion`
 --
 ALTER TABLE `configuracion`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `detalle_temp`
+-- Indices de la tabla `detalle_temp`
 --
 ALTER TABLE `detalle_temp`
   ADD PRIMARY KEY (`correlativo`);
 
 --
--- Indexes for table `entradas`
+-- Indices de la tabla `entradas`
 --
 ALTER TABLE `entradas`
   ADD PRIMARY KEY (`correlativo`);
 
 --
--- Indexes for table `producto`
+-- Indices de la tabla `producto`
 --
 ALTER TABLE `producto`
   ADD PRIMARY KEY (`codproducto`);
 
 --
--- Indexes for table `proveedor`
+-- Indices de la tabla `proveedor`
 --
 ALTER TABLE `proveedor`
   ADD PRIMARY KEY (`codproveedor`);
 
 --
--- Indexes for table `rol`
+-- Indices de la tabla `rol`
 --
 ALTER TABLE `rol`
   ADD PRIMARY KEY (`idrol`);
 
 --
--- Indexes for table `usuario`
+-- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`idusuario`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `cliente`
+-- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
--- AUTO_INCREMENT for table `configuracion`
+-- AUTO_INCREMENT de la tabla `configuracion`
 --
 ALTER TABLE `configuracion`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `detalle_temp`
+-- AUTO_INCREMENT de la tabla `detalle_temp`
 --
 ALTER TABLE `detalle_temp`
   MODIFY `correlativo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `entradas`
+-- AUTO_INCREMENT de la tabla `entradas`
 --
 ALTER TABLE `entradas`
-  MODIFY `correlativo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `correlativo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
--- AUTO_INCREMENT for table `producto`
+-- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `codproducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `codproducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
--- AUTO_INCREMENT for table `proveedor`
+-- AUTO_INCREMENT de la tabla `proveedor`
 --
 ALTER TABLE `proveedor`
-  MODIFY `codproveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `codproveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `rol`
+-- AUTO_INCREMENT de la tabla `rol`
 --
 ALTER TABLE `rol`
   MODIFY `idrol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `usuario`
+-- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
