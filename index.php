@@ -115,7 +115,7 @@ if (!empty($_SESSION['active'])) {
 <footer >
   <div class="container my-auto">
     <div class="copyright text-center my-auto">
-      <span>Copyright &copy; July Forero & Jose Rincon v.1.2.1 beta<?php echo date("Y"); ?></span>
+      <span>Copyright &copy; July Forero & Jose Rincon v.1.2.1 beta <?php echo date("Y"); ?></span>
     </div>
   </div>
 </footer>
