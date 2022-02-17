@@ -21,7 +21,7 @@
 							<th>NOMBRE</th>
 							<th>CORREO</th>
 							<th>USUARIO</th>
-							<th>DIRECCIÓN</th>
+							<th>ROL</th>
 							<?php if ($_SESSION['rol'] == 1) { ?>
 							<th>ACCIONES</th>
 							<?php }?>
